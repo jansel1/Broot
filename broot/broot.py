@@ -21,7 +21,7 @@ while True:
 
     passwords = []
 
-    passwords_2 = [] # All lowercase
+    passwords_2 = [] # All lowercase 
     passwords_3 = [] # All upercase
     passwords_4 = [] # No symbols
     passwords_5 = [] # No numbers
