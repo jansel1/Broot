@@ -3,10 +3,6 @@ import os
 import re
 import string
 
-os.system("cls")
-
-symbols = ".!?#-"
-
 def ParseFile(fil):
     with open(fil, 'r') as file:
         lines = file.readlines()
@@ -17,19 +13,19 @@ def ParseFile(fil):
     with open(fil, 'w') as file:
         file.writelines(out)
 
-def BrootMain(testmode=False):
-    Extratags = input("Add known things (must be 3 or more things): ").split(',')
+while True:
+    symbols = ".!?#-"
 
-    Amount = input("How many passwords to generate (not accurate! may generate more or less):  ")
-
-    if not Extratags:
-        print(" Please fill in the required fields! (Error Code: 150)")
-        return 150
+    Extratags = input("Add stuff (Seperate by comma): ").split(',')
+    Amount = input("Enter the amount of passwords: ")
 
     passwords = []
-    passwords_2 = []
-    passwords_3 = []
-    
+
+    passwords_2 = [] # All lowercase
+    passwords_3 = [] # All upercase
+    passwords_4 = [] # No symbols
+    passwords_5 = [] # No numbers
+
     components = Extratags
 
     for tag in Extratags:
@@ -38,7 +34,7 @@ def BrootMain(testmode=False):
     for _ in range(int(Amount)):
         password = ""
         num_parts = random.randint(1, 3)
-        
+
         parts = random.sample(components, num_parts)
 
         for p in parts:
@@ -63,22 +59,17 @@ def BrootMain(testmode=False):
     passwords_2 = [element.lower() for element in passwords]
     passwords_3 = [element.upper() for element in passwords]
 
-    print("Done! Don't exit, we're storing the passwords to ./passwords-broot.txt")
+    passwords_4 = [''.join(re.findall(r'\w', element)) for element in passwords]
+    passwords_5 = [''.join(re.findall(r'[A-Za-z]', element)).upper() for element in passwords]
 
-    with open("./passwords-broot.txt", 'a') as f:
-        for pwd in passwords:
-            f.write(pwd + "\n")
-        for pwd2 in passwords_2:
-            f.write(pwd2 + "\n")
-        for pwd3 in passwords_3:
-            f.write(pwd3 + "\n")
-    
-    ParseFile("./passwords-broot.txt")
 
-while True:
-    try:
-        BrootMain(testmode=True)
-        os.system("cls")
-    except KeyboardInterrupt:
-        print("Leaving.. bye!")
-        quit()
+    print("Don't exit, we're storing the passwords to ./passwords.txt")
+
+    with open("./passwords.txt", 'a') as f:
+        for pwd in passwords: f.write(pwd + "\n")
+        for pwd2 in passwords_2: f.write(pwd2 + "\n")
+        for pwd3 in passwords_3: f.write(pwd3 + "\n")
+        for pwd4 in passwords_4: f.write(pwd4 + "\n")
+        for pwd5 in passwords_5: f.write(pwd5 + "\n")
+
+    ParseFile("./passwords.txt")
